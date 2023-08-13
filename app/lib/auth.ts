@@ -15,7 +15,7 @@ export const authOptions: NextAuthOptions = {
   },
   providers: [
     CredentialProvider({
-      name: "CredentialsBandi",
+      name: "CredentialsKsSSO",
       credentials: {
         username: { label: "username", type: "text" },
         password: { label: "password", type: "password" },
