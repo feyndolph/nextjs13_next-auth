@@ -3,13 +3,19 @@ import type { NextAuthOptions } from "next-auth";
 import CredentialProvider from "next-auth/providers/credentials";
 
 export const authOptions: NextAuthOptions = {
+  pages: {
+    signIn: "/login",
+  },
   session: {
     strategy: "jwt",
     maxAge: 60 * 60,
   },
+  jwt: {
+    maxAge: 60 * 60,
+  },
   providers: [
     CredentialProvider({
-      name: "Credentials",
+      name: "CredentialsBandi",
       credentials: {
         username: { label: "username", type: "text" },
         password: { label: "password", type: "password" },
@@ -48,29 +54,36 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token }) {
-      console.log("--------------------callback jwt-------------------");
-      console.log(token);
-      return token;
+    // async signIn({ user, account, profile, email, credentials }) {
+    //   console.log("--------------------callback signIn-------------------");
+    //   console.log(user);
+    //   console.log(account);
+    //   console.log(profile);
+    //   console.log(credentials);
+    //   return true;
+    // },
+    async redirect({ url, baseUrl }) {
+      return baseUrl;
     },
-    async signIn({ user, account, profile, email, credentials }) {
-      console.log("--------------------callback signIn-------------------");
-      console.log(user);
-      console.log(account);
-      console.log(profile);
-      return true;
+    async jwt({ token, user, account, profile }) {
+      // console.log("--------------------callback jwt-------------------");
+      // console.log(token);
+      // console.log(user);
+      // console.log(account); // undefined
+      // console.log(profile); // undefined
+      return { ...token, ...user };
     },
     async session({ session, token, user }) {
-      console.log("--------------------session");
-      console.log(session);
-      console.log("--------------------token");
-      console.log(token);
-      console.log("--------------------user");
-      console.log(user);
+      // console.log("--------------------session");
+      // console.log(session);
+      // console.log("--------------------token");
+      // console.log(token);
+      // console.log("--------------------user");
+      // console.log(user);
+      // session.accessToken = "accesstoken";
+      // session.user.id_token = "id_token";
+      session.user = token as any;
       return session;
     },
-  },
-  pages: {
-    signIn: "/login",
   },
 };
