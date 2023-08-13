@@ -1,14 +1,18 @@
 "use client";
-import { signIn } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
+import { getServerSession } from "next-auth";
+import { signIn, useSession } from "next-auth/react";
+import { redirect, useSearchParams } from "next/navigation";
 import { useRef } from "react";
+import { authOptions } from "../lib/auth";
 
-export default function Login() {
+export default async function Login() {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
   const searchParams = useSearchParams();
   let callbackUrl = searchParams.get("callbackUrl");
+
+  const { data: session, status } = useSession();
 
   const handleSubmit = async () => {
     if (emailRef.current === null || emailRef.current === "") {
@@ -31,6 +35,9 @@ export default function Login() {
     const result = await signIn("credentials", { callbackUrl });
   };
 
+  if (status === "authenticated") {
+    redirect("/");
+  }
   return (
     <main className="flex min-h-screen flex-col items-center space-y-10 p-24">
       <h1 className="text-4xl font-semibold">Login</h1>

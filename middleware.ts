@@ -18,6 +18,7 @@ export async function middleware(req: NextRequest) {
   //     }
   //   }
 
+  console.log("session:" + session);
   if (session) {
     if (pathname.startsWith("/login")) {
       return NextResponse.redirect(new URL("/", req.url));
@@ -27,4 +28,4 @@ export async function middleware(req: NextRequest) {
   }
 }
 
-export const config = { matcher: ["/extra/:path*", "/login/:path*"] };
+export const config = { matcher: ["/extra/:path*"] };
