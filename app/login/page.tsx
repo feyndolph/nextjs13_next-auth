@@ -1,11 +1,9 @@
 "use client";
-import { getServerSession } from "next-auth";
 import { signIn, useSession } from "next-auth/react";
 import { redirect, useSearchParams } from "next/navigation";
 import { useRef } from "react";
-import { authOptions } from "../lib/auth";
 
-export default async function Login() {
+export default function Login() {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
