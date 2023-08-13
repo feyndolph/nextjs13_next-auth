@@ -1,10 +1,14 @@
 "use client";
 import { signIn } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 import { useRef } from "react";
 
 export default function Login() {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
+
+  const searchParams = useSearchParams();
+  let callbackUrl = searchParams.get("callbackUrl");
 
   const handleSubmit = async () => {
     if (emailRef.current === null || emailRef.current === "") {
@@ -14,12 +18,17 @@ export default function Login() {
     // console.log(emailRef.current);
     // console.log(passwordRef.current);
 
-    const result = await signIn("credentials", {
-      username: emailRef.current,
-      password: passwordRef.current,
-      redirect: true,
-      callbackUrl: "/",
-    });
+    // const result = await signIn("credentials", {
+    //   username: emailRef.current,
+    //   password: passwordRef.current,
+    //   redirect: true,
+    //   callbackUrl: "/profile/client",
+    // });
+    if (!callbackUrl) {
+      callbackUrl = "/";
+    }
+
+    const result = await signIn("credentials", { callbackUrl });
   };
 
   return (
